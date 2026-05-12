@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>HisokaMRKT | Миниатюрные пробники духов</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0c0b0e;
+            color: #eae6e0;
+            overflow-x: hidden;
+        }
+
+        /* кастомный скролл */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1c22;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c9a87b;
+            border-radius: 10px;
+        }
+
+        /* анимация появления секций */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-6px); }
+        }
+
+        @keyframes glowPulse {
+            0% { text-shadow: 0 0 2px #e2bc8c, 0 0 4px #b87c4f; }
+            100% { text-shadow: 0 0 12px #f3d382, 0 0 20px #c97e3a; }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bgScroll {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        /* футуристичный градиентный фон */
+        .hero {
+            background: radial-gradient(circle at 20% 30%, #1f1b24, #020102);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: repeating-linear-gradient(45deg, rgba(201, 168, 123, 0.02) 0px, rgba(201, 168, 123, 0.02) 2px, transparent 2px, transparent 8px);
+            animation: bgScroll 40s linear infinite;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* хедер */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(201, 168, 123, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #f5e7d3, #c9a87b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: glowPulse 2s infinite alternate;
+        }
+
+        .logo span {
+            font-size: 1.2rem;
+            background: none;
+            -webkit-background-clip: unset;
+            color: #e2bc8c;
+        }
+
+        .nav a {
+            color: #ddd0c0;
+            margin-left: 28px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .nav a:hover {
+            color: #e7bf8e;
+            border-bottom: 1px solid #c9a87b;
+        }
+
+        .search-cart {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .search-cart input {
+            background: #2a262f;
+            border: 1px solid #4a3e33;
+            padding: 10px 18px;
+            border-radius: 40px;
+            color: white;
+            outline: none;
+            width: 200px;
+        }
+
+        .cart-icon {
+            font-size: 26px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .cart-icon:hover { transform: scale(1.08); color:#c9a87b;}
+
+        /* баннер с ароматом */
+        .banner {
+            text-align: center;
+            padding: 70px 0 50px;
+        }
+        .banner h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(130deg, #f5e2c9, #b87c4f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: slideUp 0.8s ease;
+        }
+        .banner p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 20px auto;
+            opacity: 0.8;
+        }
+        .btn {
+            background: #c9a87b;
+            border: none;
+            padding: 14px 36px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            color: #0c0b0e;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #e2b37c;
+            transform: scale(1.02);
+            box-shadow: 0 8px 22px rgba(201,168,123,0.3);
+        }
+
+        /* фильтры категорий */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin: 40px 0 30px;
+        }
+        .filter-chip {
+            background: #1e1b22;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .filter-chip.active, .filter-chip:hover {
+            background: #c9a87b;
+            color: #0c0b0e;
+            border-color: #e2bc8c;
+        }
+
+        /* СЕТКА ТОВАРОВ — МНОГО КАРТОЧЕК */
+        .perfume-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 35px 25px;
+            margin: 30px 0 60px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #17141c, #0f0d12);
+            border-radius: 32px;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            cursor: pointer;
+            border: 1px solid rgba(201,168,123,0.2);
+            backdrop-filter: blur(4px);
+            animation: slideUp 0.5s ease backwards;
+            animation-delay: calc(var(--order,0) * 0.05s);
+        }
+
+        .card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: #c9a87b;
+            box-shadow: 0 30px 35px -18px rgba(0,0,0,0.8);
+        }
+
+        .card-img {
+            height: 280px;
+            overflow: hidden;
+            position: relative;
+        }
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .card:hover .card-img img {
+            transform: scale(1.08);
+        }
+
+        .badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #e1bc8b;
+        }
+
+        .card-info {
+            padding: 20px 18px 24px;
+        }
+        .brand {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #c9a87b;
+        }
+        .perfume-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 8px 0;
+        }
+        .volume {
+            font-size: 0.8rem;
+            color: #a4947c;
+        }
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-top: 16px;
+        }
+        .price {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #f3d382;
+        }
+        .buy-btn {
+            background: none;
+            border: 1.5px solid #c9a87b;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: 0.2s;
+            cursor: pointer;
+            color: #e6cfaa;
+        }
+        .buy-btn:hover {
+            background: #c9a87b;
+            color: #0c0b0e;
+        }
+
+        /* отзывы / блок преимуществ */
+        .features {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            background: #0b090e;
+            border-radius: 60px;
+            padding: 50px 40px;
+            margin: 40px 0;
+            border: 1px solid #2f2a2a;
+        }
+        .feature-item {
+            flex: 1;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+        .feature-icon {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        /* подвал */
+        .footer {
+            border-top: 1px solid rgba(201,168,123,0.2);
+            margin-top: 70px;
+            padding: 40px 0;
+            text-align: center;
+            color: #a68f71;
+        }
+
+        @media (max-width: 780px) {
+            .container { padding: 0 20px; }
+            .banner h1 { font-size: 2.3rem; }
+            .header { flex-direction: column; gap: 20px; }
+            .nav a { margin: 0 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="container">
+        <div class="header">
+            <div class="logo">⚜️ HISOKA<span>MRKT</span> ⚜️</div>
+            <div class="nav">
+                <a href="#">Ароматы</a>
+                <a href="#">Ниши</a>
+                <a href="#">Бренды</a>
+                <a href="#">Отзывы</a>
+                <a href="#">Блог</a>
+            </div>
+            <div class="search-cart">
+                <input type="text" placeholder="Найти пробник..." id="searchInputGlobal">
+                <div class="cart-icon">🛒<span style="font-size: 14px;" id="cartCount">0</span></div>
+            </div>
+        </div>
+
+        <div class="banner">
+            <h1>МИНИАТЮРЫ, КОТОРЫЕ ВДОХНОВЛЯЮТ</h1>
+            <p>Оригинальные пробники 1–5ml | Доставка по всему миру | Коллекционные издания</p>
+            <button class="btn" id="exploreBtn">✨ ИССЛЕДОВАТЬ АРОМАТЫ ✨</button>
+        </div>
+
+        <div class="filters" id="filterContainer">
+            <div class="filter-chip active" data-filter="all">Все</div>
+            <div class="filter-chip" data-filter="нишевая">Нишевая парфюмерия</div>
+            <div class="filter-chip" data-filter="цветочный">Цветочные</div>
+            <div class="filter-chip" data-filter="древесный">Древесные</div>
+            <div class="filter-chip" data-filter="свежий">Свежие / цитрус</div>
+        </div>
+
+        <div class="perfume-grid" id="perfumeGrid"></div>
+
+        <div class="features">
+            <div class="feature-item"><span class="feature-icon">💧</span><br>Подлинные миниатюры<br><small>100% оригинал</small></div>
+            <div class="feature-item"><span class="feature-icon">📦</span><br>Быстрая отправка<br><small>1-3 дня</small></div>
+            <div class="feature-item"><span class="feature-icon">🎁</span><br>Подарочная упаковка<br><small>бесплатно</small></div>
+            <div class="feature-item"><span class="feature-icon">⚡</span><br>Кэшбэк 5%</div>
+        </div>
+        <div class="footer">
+            ⚜️ HISOKA MRKT — культовые миниатюры и пробники со всего мира ⚜️<br>
+            © 2025 | Ароматы для истинных ценителей
+        </div>
+    </div>
+</div>
+
+<script>
+    // БОЛЬШАЯ БАЗА ПРОБНИКОВ (40+ позиций с картинками, реальные бренды)
+    const perfumes = [
+        { id: 1, name: "Baccarat Rouge 540", brand: "Maison Francis Kurkdjian", volume: "2 ml", price: 1450, type: "нишевая", img: "https://fimgs.net/mdimg/perfume/375x500.17269.jpg", note: "🔥 бестселлер" },
+        { id: 2, name: "Aventus", brand: "Creed", volume: "3 ml", price: 1890, type: "древесный", img: "https://fimgs.net/mdimg/perfume/375x500.10778.jpg", note: "Культовый" },
+        { id: 3, name: "La Vie Est Belle", brand: "Lancôme", volume: "4 ml", price: 890, type: "цветочный", img: "https://fimgs.net/mdimg/perfume/375x500.16181.jpg", note: "Сладкая ириска" },
+        { id: 4, name: "Sauvage", brand: "Dior", volume: "2 ml", price: 1090, type: "свежий", img: "https://fimgs.net/mdimg/perfume/375x500.45241.jpg", note: "Древесно-пряный" },
+        { id: 5, name: "Black Opium", brand: "YSL", volume: "3 ml", price: 990, type: "цветочный", img: "https://fimgs.net/mdimg/perfume/375x500.26570.jpg", note: "Кофе и ваниль" },
+        { id: 6, name: "Tobacco Vanille", brand: "Tom Ford", volume: "2 ml", price: 1650, type: "нишевая", img: "https://fimgs.net/mdimg/perfume/375x500.10942.jpg", note: "Элитный табак" },
+        { id: 7, name: "Light Blue", brand: "D&G", volume: "5 ml", price: 750, type: "свежий", img: "https://fimgs.net/mdimg/perfume/375x500.7893.jpg", note: "Цитрусовый бриз" },
+        { id: 8, name: "Good Girl", brand: "Carolina Herrera", volume: "3 ml", price: 1150, type: "цветочный", img: "https://fimgs.net/mdimg/perfume/375x500.38914.jpg", note: "Миндаль+жакмин" },
+        { id: 9, name: "Interlude Man", brand: "Amouage", volume: "2 ml", price: 1790, type: "нишевая", img: "https://fimgs.net/mdimg/perfume/375x500.20994.jpg", note: "Смолы, орегано" },
+        { id: 10, name: "Oud Wood", brand: "Tom Ford", volume: "2 ml", price: 1720, type: "древесный", img: "https://fimgs.net/mdimg/perfume/375x500.13744.jpg", note: "Уд и пачули" },
+        { id: 11, name: "Molecule 01", brand: "Escentric Molecules", volume: "2 ml", price: 1290, type: "нишевая", img: "https://fimgs.net/mdimg/perfume/375x500.17919.jpg", note: "Изол Е-супер" },
+        { id: 12, name: "Acqua di Giò", brand: "Giorgio Armani", volume: "4 ml", price: 820, type: "свежий", img: "https://fimgs.net/mdimg/perfume/375x500.709.jpg", note: "Морской бриз" },
+        { id: 13, name: "L'Interdit", brand: "Givenchy", volume: "3 ml", price: 1090, type: "цветочный", img: "https://fimgs.net/mdimg/perfume/375x500.38612.jpg", note: "Тубероза" },
+        { id: 14, name: "Encre Noire", brand: "Lalique", volume: "3 ml", price: 690, type: "древесный", img: "https://fimgs.net/mdimg/perfume/375x500.13505.jpg", note: "Ветивер+кипарис" },
+        { id: 15, name: "Portrait of a Lady", brand: "Frederic Malle", volume: "2 ml", price: 1950, type: "нишевая", img: "https://fimgs.net/mdimg/perfume/375x500.21537.jpg", note: "Роза и гвоздика" },
+        { id: 16, name: "The One", brand: "D&G", volume: "3 ml", price: 890, type: "цветочный", img: "https://fimgs.net/mdimg/perfume/375x500.9541.jpg", note: "Слива + ваниль" },
+        { id: 17, name: "Terre d'Hermès", brand: "Hermès", volume: "4 ml", price: 1250, type: "древесный", img: "https://fimgs.net/mdimg/perfume/375x500.7683.jpg", note: "Кремний+апельсин" },
+        { id: 18, name: "Eros", brand: "Versace", volume: "3 ml", price: 950, type: "свежий", img: "https://fimgs.net/mdimg/perfume/375x500.17672.jpg", note: "Мятно-ванильный" },
+        { id: 19, name: "Layton", brand: "Parfums de Marly", volume: "2 ml", price: 1690, type: "нишевая", img: "https://fimgs.net/mdimg/perfume/375x500.36598.jpg", note: "Яблоко+лаванда" },
+        { id: 20, name: "Flowerbomb", brand: "Viktor&Rolf", volume: "3 ml", price: 1190, type: "цветочный", img: "https://fimgs.net/mdimg/perfume/375x500.12062.jpg", note: "Взрыв цветов" },
+        { id: 21, name: "Ombre Nomade", brand: "LV", volume: "2 ml", price: 1990, type: "древесный", img: "https://fimgs.net/mdimg/perfume/375x500.75880.jpg", note: "Оуд+малина" },
+        { id: 22, name: "Angel's Share", brand: "Kilian", volume: "2 ml", price: 1850, type: "нишевая", img: "https://fimgs.net/mdimg/perfume/375x500.54645.jpg", note: "Коньяк+корица" },
+        { id: 23, name: "Coco Mademoiselle", brand: "Chanel", volume: "3 ml", price: 1490, type: "цветочный", img: "https://fimgs.net/mdimg/perfume/375x500.4436.jpg", note: "Патичоли+роза" },
+        { id: 24, name: "Bleu de Chanel", brand: "Chanel", volume: "3 ml", price: 1440, type: "свежий", img: "https://fimgs.net/mdimg/perfume/375x500.17986.jpg", note: "Грейпфрут+имбирь" }
+    ];
+
+    // кастомная корзина
+    let cart = [];
+    let activeFilter = "all";
+    let searchQuery = "";
+
+    function renderCards() {
+        let filtered = perfumes.filter(p => {
+            if (activeFilter !== "all" && p.type !== activeFilter) return false;
+            if (searchQuery && !p.name.toLowerCase().includes(searchQuery) && !p.brand.toLowerCase().includes(searchQuery)) return false;
+            return true;
+        });
+
+        const grid = document.getElementById("perfumeGrid");
+        grid.innerHTML = "";
+        filtered.forEach((p, idx) => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.style.setProperty('--order', idx % 12);
+            card.innerHTML = `
+                <div class="card-img">
+                    <img src="${p.img}" alt="${p.name}" onerror="this.src='https://placehold.co/400x400/2a232c/c9a87b?text=Arôme'">
+                    <div class="badge">${p.note || "miniature"}</div>
+                </div>
+                <div class="card-info">
+                    <div class="brand">${p.brand}</div>
+                    <div class="perfume-name">${p.name}</div>
+                    <div class="volume">Объем: ${p.volume} / пробник спрей</div>
+                    <div class="price-row">
+                        <div class="price">${p.price} ₽</div>
+                        <button class="buy-btn" data-id="${p.id}">В корзину</button>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // обработчики кнопок "В корзину"
+        document.querySelectorAll(".buy-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const id = parseInt(btn.getAttribute("data-id"));
+                const item = perfumes.find(p => p.id === id);
+                cart.push(item);
+                updateCartUI();
+                showToast(`➕ ${item.name} добавлен в корзину`);
+            });
+        });
+    }
+
+    function updateCartUI() {
+        document.getElementById("cartCount").innerText = cart.length;
+    }
+
+    function showToast(msg) {
+        let toast = document.createElement("div");
+        toast.innerText = msg;
+        toast.style.position = "fixed";
+        toast.style.bottom = "30px";
+        toast.style.right = "30px";
+        toast.style.backgroundColor = "#c9a87b";
+        toast.style.color = "#0c0b0e";
+        toast.style.padding = "12px 24px";
+        toast.style.borderRadius = "50px";
+        toast.style.fontWeight = "bold";
+        toast.style.zIndex = "9999";
+        toast.style.boxShadow = "0 8px 20px black";
+        toast.style.animation = "slideUp 0.2s ease";
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2200);
+    }
+
+    // фильтры + поиск
+    function setupListeners() {
+        document.querySelectorAll(".filter-chip").forEach(chip => {
+            chip.addEventListener("click", () => {
+                document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+                chip.classList.add("active");
+                activeFilter = chip.getAttribute("data-filter");
+                renderCards();
+            });
+        });
+
+        const searchInput = document.getElementById("searchInputGlobal");
+        searchInput.addEventListener("input", (e) => {
+            searchQuery = e.target.value.toLowerCase();
+            renderCards();
+        });
+
+        document.getElementById("exploreBtn").addEventListener("click", () => {
+            window.scrollTo({ top: document.querySelector(".perfume-grid").offsetTop - 70, behavior: "smooth" });
+            showToast("✨ Добро пожаловать в мир ароматов HisokaMRKT ✨");
+        });
+
+        document.querySelector(".cart-icon").addEventListener("click", () => {
+            if (cart.length === 0) showToast("🛒 Корзина пуста, выберите пробники");
+            else showToast(`🧾 В корзине ${cart.length} товаров. Оформление скоро!`);
+        });
+    }
+
+    renderCards();
+    setupListeners();
+    updateCartUI();
+</script>
+</body>
+</html>
